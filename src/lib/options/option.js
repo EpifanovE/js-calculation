@@ -1,4 +1,4 @@
-import {OperationBuilder} from "./operatioins"
+import {OperationBuilder, applyOperation} from "./operatioins"
 
 export class Option {
     constructor(name) {
@@ -18,13 +18,10 @@ export class Option {
 
         if (Array.isArray(this.value)) {
             return this.value.reduce((state, current) => {
-                const operation = (new OperationBuilder()).build(current.operation)
-                return operation(current.operationValue, state)
+                return applyOperation(current.operation, state, current.operationValue)
             }, unitValue)
         }
 
-        const operation = (new OperationBuilder()).build(this.value.operation)
-        const value = this.value.value ? this.value.value : 1
-        return operation(this.value.operationValue * value, unitValue)
+        return applyOperation(this.value.operation, unitValue, this.value.operationValue, this.value.value)
     }
 }

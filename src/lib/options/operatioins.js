@@ -26,3 +26,18 @@ const operationMinus = (optionValue, unitValue) => {
 const operationMultiple = (optionValue, unitValue) => {
     return unitValue * (optionValue ? optionValue : 1)
 }
+
+export const applyOperation = (operationCode, unitValue, operationValue, value = 1) => {
+    if (!operationCode) {
+        console.error(`Operation code can't be empty.`)
+        return 
+    }
+    const operation = (new OperationBuilder()).build(operationCode)
+    
+    if (!operation) {
+        console.error(`Invalid operation code: ${operationCode}.`)
+        return unitValue
+    }
+    
+    return operation(operationValue * value, unitValue)
+}

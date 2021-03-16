@@ -45,7 +45,7 @@ const getCalculation = (onChange) => {
     return calculation
 }
 
-describe("one value option", () => {
+describe("one value unit option", () => {
 
     let result = null
 
@@ -78,6 +78,16 @@ describe("one value option", () => {
 
     it("unit operation value is null", () => {
         calculation.setUnitOptionValue("price", "color", null)
+        expect(result.total).be.equal(500)
+    })
+
+    it("invalid unit option name", () => {
+        calculation.setUnitOptionValue("prices", "color", { operation: OPERATION_MULTIPLE, operationValue: 3 })
+        expect(result.total).be.equal(500)
+    })
+
+    it("invalid unit option operation name", () => {
+        calculation.setUnitOptionValue("price", "color", { operation: "INVALID_NAME", operationValue: 3 })
         expect(result.total).be.equal(500)
     })
 

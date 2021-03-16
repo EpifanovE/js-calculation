@@ -371,7 +371,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "OPERATION_PLUS": () => (/* binding */ OPERATION_PLUS),
 /* harmony export */   "OPERATION_MINUS": () => (/* binding */ OPERATION_MINUS),
 /* harmony export */   "OPERATION_MULTIPLE": () => (/* binding */ OPERATION_MULTIPLE),
-/* harmony export */   "OperationBuilder": () => (/* binding */ OperationBuilder)
+/* harmony export */   "OperationBuilder": () => (/* binding */ OperationBuilder),
+/* harmony export */   "applyOperation": () => (/* binding */ applyOperation)
 /* harmony export */ });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -418,6 +419,24 @@ var operationMultiple = function operationMultiple(optionValue, unitValue) {
   return unitValue * (optionValue ? optionValue : 1);
 };
 
+var applyOperation = function applyOperation(operationCode, unitValue, operationValue) {
+  var value = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+
+  if (!operationCode) {
+    console.error("Operation code can't be empty.");
+    return;
+  }
+
+  var operation = new OperationBuilder().build(operationCode);
+
+  if (!operation) {
+    console.error("Invalid operation code: ".concat(operationCode, "."));
+    return unitValue;
+  }
+
+  return operation(operationValue * value, unitValue);
+};
+
 /***/ }),
 
 /***/ "./src/lib/options/option.js":
@@ -453,14 +472,11 @@ var Option = function Option(name) {
 
     if (Array.isArray(_this.value)) {
       return _this.value.reduce(function (state, current) {
-        var operation = new _operatioins__WEBPACK_IMPORTED_MODULE_0__.OperationBuilder().build(current.operation);
-        return operation(current.operationValue, state);
+        return (0,_operatioins__WEBPACK_IMPORTED_MODULE_0__.applyOperation)(current.operation, state, current.operationValue);
       }, unitValue);
     }
 
-    var operation = new _operatioins__WEBPACK_IMPORTED_MODULE_0__.OperationBuilder().build(_this.value.operation);
-    var value = _this.value.value ? _this.value.value : 1;
-    return operation(_this.value.operationValue * value, unitValue);
+    return (0,_operatioins__WEBPACK_IMPORTED_MODULE_0__.applyOperation)(_this.value.operation, unitValue, _this.value.operationValue, _this.value.value);
   });
 
   this.name = name;
@@ -572,7 +588,7 @@ var getCalculation = function getCalculation(onChange) {
   return calculation;
 };
 
-describe("one value option", function () {
+describe("one value unit option", function () {
   var result = null;
   var calculation = getCalculation(function (value) {
     result = value;
@@ -614,6 +630,20 @@ describe("one value option", function () {
   });
   it("unit operation value is null", function () {
     calculation.setUnitOptionValue("price", "color", null);
+    (0,chai__WEBPACK_IMPORTED_MODULE_0__.expect)(result.total).be.equal(500);
+  });
+  it("invalid unit option name", function () {
+    calculation.setUnitOptionValue("prices", "color", {
+      operation: _lib__WEBPACK_IMPORTED_MODULE_2__.OPERATION_MULTIPLE,
+      operationValue: 3
+    });
+    (0,chai__WEBPACK_IMPORTED_MODULE_0__.expect)(result.total).be.equal(500);
+  });
+  it("invalid unit option operation name", function () {
+    calculation.setUnitOptionValue("price", "color", {
+      operation: "INVALID_NAME",
+      operationValue: 3
+    });
     (0,chai__WEBPACK_IMPORTED_MODULE_0__.expect)(result.total).be.equal(500);
   });
   it("change unit value", function () {
@@ -42577,7 +42607,7 @@ return typeDetect;
   let hash = '<unknown>';
   let options;
   try {
-    options = {"compress":null,"headers":null,"historyFallback":false,"hmr":true,"host":null,"liveReload":false,"log":{"level":"info","prefix":{"template":"{{level}}"},"name":"webpack-plugin-serve"},"open":false,"port":8080,"progress":true,"ramdisk":false,"secure":false,"static":"./dist","status":true,"waitForBuild":true,"address":"[::]:8080","compilerName":null,"wpsId":"b091525"};
+    options = {"compress":null,"headers":null,"historyFallback":false,"hmr":true,"host":null,"liveReload":false,"log":{"level":"info","prefix":{"template":"{{level}}"},"name":"webpack-plugin-serve"},"open":false,"port":8080,"progress":true,"ramdisk":false,"secure":false,"static":"./dist","status":true,"waitForBuild":true,"address":"[::]:8080","compilerName":null,"wpsId":"da331c0"};
   } catch (e) {
     const { log } = __webpack_require__(/*! ./lib/client/log */ "./node_modules/webpack-plugin-serve/lib/client/log.js");
     log.error(
@@ -43820,18 +43850,18 @@ webpackContext.id = "./src/tests sync ./node_modules/mocha-loader/dist/cjs.js! \
 /******/ 		// This function allow to reference all chunks
 /******/ 		__webpack_require__.hu = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "_-b091525-" + chunkId + "-wps-hmr.js";
+/******/ 			return "_-da331c0-" + chunkId + "-wps-hmr.js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/get update manifest filename */
 /******/ 	(() => {
-/******/ 		__webpack_require__.hmrF = () => ("main-b091525-wps-hmr.json");
+/******/ 		__webpack_require__.hmrF = () => ("main-da331c0-wps-hmr.json");
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("f1719dc0968396e6e9dc")
+/******/ 		__webpack_require__.h = () => ("807d4803feffe2a5e72f")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
